@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Document - EduDocs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .preview {
+            margin-top: 15px;
+        }
+        .preview img, .preview video {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="mb-4">
+            <h2 class="text-center">📤 Upload New Document</h2>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="card p-4 shadow bg-white">
+            <div class="mb-3">
+                <label for="file" class="form-label">Choose File</label>
+                <input class="form-control" type="file" id="file" name="file" accept=".pdf,.docx,.txt,.jpg,.png,.mp4,.webm" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <input type="text" name="description" class="form-control" id="description" placeholder="Enter description" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="category" class="form-label">Category</label>
+                <select name="category" id="category" class="form-select" required>
+                    <option value="">Select Category</option>
+                    <option value="Notes">Notes</option>
+                    <option value="Papers">Papers</option>
+                    <option value="Assignments">Assignments</option>
+                </select>
+            </div>
+
+            <div class="preview" id="preview"></div>
+
+            <button type="submit" class="btn btn-primary mt-3">Upload</button>
+            <a href="/" class="btn btn-secondary mt-3">Back</a>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('file').addEventListener('change', function(event) {
+            const preview = document.getElementById('preview');
+            preview.innerHTML = '';  // Clear previous
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const ext = file.name.split('.').pop().toLowerCase();
+                if (['jpg', 'jpeg', 'png'].includes(ext)) {
+                    preview.innerHTML = '<img src="' + e.target.result + '" class="img-thumbnail">';
+                } else if (['mp4', 'webm'].includes(ext)) {
+                    preview.innerHTML = '<video controls src="' + e.target.result + '" class="w-100"></video>';
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+    </script>
+</body>
+</html>
+
